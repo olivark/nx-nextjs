@@ -1,0 +1,99 @@
+{
+  "version": 2,
+  "cli": {
+    "defaultCollection": "@nrwl/next"
+  },
+  "defaultProject": "nx-nextjs",
+  "generators": {
+    "@nrwl/react": {
+      "application": {
+        "babel": true
+      }
+    },
+    "@nrwl/next": {
+      "application": {
+        "style": "styled-components",
+        "linter": "eslint"
+      }
+    }
+  },
+  "projects": {
+    "nx-nextjs": {
+      "root": "apps/nx-nextjs",
+      "sourceRoot": "apps/nx-nextjs",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/next:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "root": "apps/nx-nextjs",
+            "outputPath": "dist/apps/nx-nextjs"
+          },
+          "configurations": {
+            "production": {}
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/next:server",
+          "options": {
+            "buildTarget": "nx-nextjs:build",
+            "dev": true
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "nx-nextjs:build:production",
+              "dev": false
+            }
+          }
+        },
+        "export": {
+          "executor": "@nrwl/next:export",
+          "options": {
+            "buildTarget": "nx-nextjs:build:production"
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/nx-nextjs"],
+          "options": {
+            "jestConfig": "apps/nx-nextjs/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/nx-nextjs/**/*.{ts,tsx,js,jsx}"]
+          }
+        }
+      }
+    },
+    "nx-nextjs-e2e": {
+      "root": "apps/nx-nextjs-e2e",
+      "sourceRoot": "apps/nx-nextjs-e2e/src",
+      "projectType": "application",
+      "targets": {
+        "e2e": {
+          "executor": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/nx-nextjs-e2e/cypress.json",
+            "tsConfig": "apps/nx-nextjs-e2e/tsconfig.e2e.json",
+            "devServerTarget": "nx-nextjs:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "nx-nextjs:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/nx-nextjs-e2e/**/*.{js,ts}"]
+          }
+        }
+      }
+    }
+  }
+}
